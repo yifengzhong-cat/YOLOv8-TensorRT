@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  yolov8-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yolov8-tensorrt-api:latest
+    runtime: nvidia
+    ports:
+      - "22266:22266"
+    volumes:
+      # Mount host directories for TensorRT engine files and inference output
+      - ./models_dir:/workspace/models_dir
+      - ./output:/workspace/output
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+    # Override CMD to point at a specific engine file.
+    # Example: docker compose run yolov8-api /workspace/models_dir/yolov8n.engine
+    command: ["/workspace/models_dir/yolov8n.engine"]
