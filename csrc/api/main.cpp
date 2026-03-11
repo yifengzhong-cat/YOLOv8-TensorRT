@@ -276,6 +276,19 @@ static bool loadModelsFromConfig(const std::string& configPath)
 }
 
 // =============================================================================
+// Helper: safely stop a video task and join its thread
+// =============================================================================
+static void stopVideoTask(std::shared_ptr<VideoTask>& task)
+{
+    task->command = 0;
+    if (task->workerThread.joinable()) {
+        // Wait for the worker to finish (it checks command flag each frame)
+        task->workerThread.join();
+    }
+    task->running = false;
+}
+
+// =============================================================================
 // Video task worker: pulls stream, runs inference, saves MP4
 // =============================================================================
 static void videoTaskWorker(std::shared_ptr<VideoTask> task)
@@ -589,10 +602,7 @@ int main(int argc, char** argv)
             // Stop existing task if any
             if (g_videoTasks.count(analyseId)) {
                 auto& existing = g_videoTasks[analyseId];
-                existing->command = 0;
-                existing->running = false;
-                if (existing->workerThread.joinable())
-                    existing->workerThread.detach();
+                stopVideoTask(existing);
                 g_videoTasks.erase(analyseId);
             }
 
@@ -661,7 +671,7 @@ int main(int argc, char** argv)
         auto& task = it->second;
         switch (command) {
             case 0: // Stop
-                task->command = 0;
+                stopVideoTask(task);
                 res.set_content(
                     makeResponse("200", nullptr, "任务已停止").dump(),
                     "application/json");
@@ -677,10 +687,7 @@ int main(int argc, char** argv)
                     "application/json");
                 break;
             case 2: // Delete
-                task->command = 0;
-                task->running = false;
-                if (task->workerThread.joinable())
-                    task->workerThread.detach();
+                stopVideoTask(task);
                 g_videoTasks.erase(it);
                 res.set_content(
                     makeResponse("200", nullptr, "任务已删除").dump(),
@@ -874,11 +881,7 @@ int main(int argc, char** argv)
 
         // If task was running, restart with new URL
         if (task->running) {
-            task->command = 0;
-            task->running = false;
-            if (task->workerThread.joinable())
-                task->workerThread.detach();
-
+            stopVideoTask(task);
             task->command = 1;
             task->running = true;
             task->workerThread = std::thread(videoTaskWorker, task);
