@@ -1,0 +1,39 @@
+# Version control
+.git
+.gitignore
+
+# Python caches
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.eggs
+
+# Build artifacts
+build/
+*/build/
+*.o
+*.so
+*.engine
+*.onnx
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (avoid recursive builds)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation and non-essential files
+docs/
+*.md
+LICENSE

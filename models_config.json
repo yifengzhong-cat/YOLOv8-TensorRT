@@ -1,0 +1,101 @@
+{
+    "models": [
+        {
+            "name": "model_mengdong_raa_adjusted",
+            "algCode": "010161",
+            "algDesc": "安全装备检测",
+            "ptFile": "model_mengdong_raa_adjusted.pt",
+            "engineFile": "model_mengdong_raa_adjusted.engine",
+            "labels": {
+                "0": "person",
+                "1": "safetybelt",
+                "2": "mapblu",
+                "3": "mapor",
+                "4": "mapr",
+                "5": "mapwh",
+                "6": "mapy"
+            },
+            "labelDescriptions": {
+                "0": "人",
+                "1": "安全带",
+                "2": "蓝色安全帽",
+                "3": "橘色安全帽",
+                "4": "红色安全帽",
+                "5": "白色安全帽",
+                "6": "黄色安全帽"
+            }
+        },
+        {
+            "name": "model_mengdong_small_SRL",
+            "algCode": "010201",
+            "algDesc": "钩子与差速器检测",
+            "ptFile": "model_mengdong_small_SRL.pt",
+            "engineFile": "model_mengdong_small_SRL.engine",
+            "labels": {
+                "0": "hook",
+                "1": "SRL"
+            },
+            "labelDescriptions": {
+                "0": "钩子",
+                "1": "差速器"
+            }
+        },
+        {
+            "name": "model_mengdong_tower",
+            "algCode": "010301",
+            "algDesc": "铁塔检测",
+            "ptFile": "model_mengdong_tower.pt",
+            "engineFile": "model_mengdong_tower.engine",
+            "labels": {
+                "0": "tower"
+            },
+            "labelDescriptions": {
+                "0": "铁塔"
+            }
+        },
+        {
+            "name": "model_mengdong_scene_album",
+            "algCode": "010401",
+            "algDesc": "场景设备检测",
+            "ptFile": "model_mengdong_scene_album.pt",
+            "engineFile": "model_mengdong_scene_album.engine",
+            "labels": {
+                "0": "AerialWorkBucketTruck",
+                "1": "ConductorSpacer",
+                "2": "byq",
+                "3": "daozha",
+                "4": "dlq",
+                "5": "gk",
+                "6": "jsj",
+                "7": "pcs",
+                "8": "pole",
+                "9": "xl"
+            },
+            "labelDescriptions": {
+                "0": "斗臂车",
+                "1": "导线间隔棒",
+                "2": "变压器",
+                "3": "刀闸",
+                "4": "断路器",
+                "5": "高空屋顶",
+                "6": "脚手架",
+                "7": "脚扣",
+                "8": "电线杆",
+                "9": "线路"
+            }
+        }
+    ],
+    "server": {
+        "host": "0.0.0.0",
+        "port": 22266,
+        "modelsDir": "/workspace/models_dir",
+        "outputDir": "/workspace/output"
+    },
+    "inference": {
+        "scoreThreshold": 0.25,
+        "iouThreshold": 0.65,
+        "topk": 100,
+        "inputWidth": 640,
+        "inputHeight": 640
+    }
+}

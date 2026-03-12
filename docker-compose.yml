@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  yolov8-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yolov8-tensorrt-api:latest
+    runtime: nvidia
+    ports:
+      - "22266:22266"
+    volumes:
+      - ./models_dir:/workspace/models_dir
+      - ./output:/workspace/output
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+      - MODELS_DIR=/workspace/models_dir
+      - OUTPUT_DIR=/workspace/output
+      - CONFIG_FILE=/workspace/models_config.json
+      - SERVER_PORT=22266
+      - SERVER_HOST=0.0.0.0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
