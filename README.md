@@ -206,6 +206,29 @@ Please see more information in [`Cls.md`](docs/Cls.md)
 
 Please see more information in [`Obb.md`](docs/Obb.md)
 
+# Cloud Deploy (Docker API Server / 云端部署)
+
+Deploy YOLOv8 models to cloud with Docker, TensorRT + CUDA acceleration, and REST API interface.
+
+使用 Docker 将 YOLOv8 模型部署到云端，支持 TensorRT + CUDA 加速推理，提供 REST API 接口进行图片和视频流的分析。
+
+See detailed documentation in [`CloudDeploy.md`](docs/CloudDeploy.md)
+
+Quick start:
+
+``` shell
+# Prepare models
+mkdir -p models_dir
+cp your_models/*.pt models_dir/
+
+# Build and start
+docker compose build
+docker compose up -d
+
+# Test
+curl http://localhost:22266/health
+```
+
 # DeepStream Detection Deploy
 
 See more in [`README.md`](csrc/deepstream/README.md)
